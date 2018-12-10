@@ -2,85 +2,166 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>FML Calculator</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="description" content="Fantasy Movie League Calculator" />
     <meta name="author" content="Matt Busche" />
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-49379810-1"></script>
-    <script src="https://browser.sentry-cdn.com/4.4.1/bundle.min.js" crossorigin="anonymous"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>FML Calculator</title>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
       }
-      gtag('js', new Date());
 
-      gtag('config', 'UA-49379810-1');
-      Sentry.init({ dsn: 'https://76924085a35e42049ac15347d91fd60b@sentry.io/1292401' });
-    </script>
+      html {
+        font-family: sans-serif;
+        line-height: 1.15;
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+        -ms-overflow-style: scrollbar;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        display: flex;
+        flex-direction: column;
+      }
+      .content {
+        flex: 1 0 auto;
+      }
+      .footer {
+        flex-shrink: 0;
+
+        right: 0;
+        bottom: 0;
+        left: 0;
+        padding: 1rem;
+        background-color: #efefef;
+        text-align: center;
+      }
+
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji',
+          'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #212529;
+        text-align: left;
+        background-color: #fff;
+      }
+
+      [tabindex='-1']:focus {
+        outline: 0 !important;
+      }
+
+      img {
+        vertical-align: middle;
+        border-style: none;
+      }
+
+      textarea {
+        margin: 0;
+        font-family: inherit;
+        font-size: inherit;
+        line-height: inherit;
+        overflow: auto;
+        resize: vertical;
+      }
+
+      h1,
+      h5 {
+        margin-bottom: 0.5rem;
+        margin-top: 0;
+        font-family: inherit;
+        font-weight: 500;
+        line-height: 1.2;
+        color: inherit;
+        font-size: 2.5rem;
+      }
+
+      h5 {
+        font-size: 1.25rem;
+      }
+
+      .container-fluid {
+        width: 100%;
+        padding-right: 15px;
+        padding-left: 15px;
+        margin-right: auto;
+        margin-left: auto;
+      }
+    </style>
   </head>
   <body>
-    <h1>FML Calculator</h1>
-    <h2 id="perfHeader" style="display: none;">Performance</h2>
-    <table id="tableHeader" style="display:none" border="1">
-      <thead>
-        <tr>
-          <th>Movie</th>
-          <th>Cost</th>
-          <th>Estimate</th>
-          <th>Ratio</th>
-        </tr>
-      </thead>
-      <tbody id="performance"></tbody>
-    </table>
-    <h2 id="results1" style="display: none;">Top 20 results</h2>
-    <div id="results2" style="display: none;">
-      <table id="resultsTable" border="1">
+    <div class="content">
+      <h1>FML Calculator</h1>
+      <h2 id="perfHeader" style="display: none;">Performance</h2>
+      <table id="tableHeader" style="display:none" border="1">
         <thead>
           <tr>
-            <th>#</th>
-            <th>Screen 1</th>
-            <th>Screen 2</th>
-            <th>Screen 3</th>
-            <th>Screen 4</th>
-            <th>Screen 5</th>
-            <th>Screen 6</th>
-            <th>Screen 7</th>
-            <th>Screen 8</th>
+            <th>Movie</th>
             <th>Cost</th>
-            <th>Box Office</th>
+            <th>Estimate</th>
+            <th>Ratio</th>
           </tr>
         </thead>
-        <tbody id="addMovies"></tbody>
+        <tbody id="performance"></tbody>
+      </table>
+      <h2 id="results1" style="display: none;">Top 20 results</h2>
+      <div id="results2" style="display: none;">
+        <table id="resultsTable" border="1">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Screen 1</th>
+              <th>Screen 2</th>
+              <th>Screen 3</th>
+              <th>Screen 4</th>
+              <th>Screen 5</th>
+              <th>Screen 6</th>
+              <th>Screen 7</th>
+              <th>Screen 8</th>
+              <th>Cost</th>
+              <th>Box Office</th>
+            </tr>
+          </thead>
+          <tbody id="addMovies"></tbody>
+        </table>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Movies</th>
+            <th>Cost</th>
+            <th>Estimate</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><textarea id="movies" name="movies" rows="15" cols="35"></textarea></td>
+            <td><textarea id="movieCost" name="movieCost" rows="15" cols="6"></textarea></td>
+            <td><textarea id="movieRevenue" name="movieRevenue" rows="15" cols="15"></textarea></td>
+          </tr>
+          <tr>
+            <td><button id="sub">get results</button></td>
+          </tr>
+        </tbody>
       </table>
     </div>
-    <table>
-      <thead>
-        <tr>
-          <th>Movies</th>
-          <th>Cost</th>
-          <th>Estimate</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><textarea id="movies" name="movies" rows="15" cols="35"></textarea></td>
-          <td><textarea id="movieCost" name="movieCost" rows="15" cols="6"></textarea></td>
-          <td><textarea id="movieRevenue" name="movieRevenue" rows="15" cols="15"></textarea></td>
-        </tr>
-        <tr>
-          <td><button id="sub">get results</button></td>
-        </tr>
-      </tbody>
-    </table>
 
-    <footer style="position: absolute; right: 0; bottom: 0;left: 0;padding: 1rem;background-color: #efefef;text-align: center;">
-        Created by <a href="https://matthewbusche.com" target="_blank">Matt Busche</a>
-        <a href="https://twitter.com/mrbusche" target="_blank">
-          <img
-            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAMAAAC6V+0/AAAAS1BMVEUdofL///8aoPEKmfEVnvERnPEDlvDx+f6n2vpcvPWAyvdEsfTj8/3d8P3a7/zD5vu74/ut3fqg1/mS0fiGzPh8yPdRt/QyqfMAlPCGNm7pAAAAcklEQVQY063Oyw7DMAhEUWDAsZO+3///pW2RmHTf3IUXR9YI2S4z+ckt3+YtgjZgn3dRnca1FLsD4NBvp9pAV72JJ3I3hrJXbeJM24On4Fg4h1TohbD1aPQpbQmayHNOe0CIfs9/Fw9Zs0AzNO7RjfJ/b/csAlhCi+ExAAAAAElFTkSuQmCC"
-        /></a>
-      </footer>
+    <footer class="footer">
+      Created by <a href="https://matthewbusche.com" target="_blank">Matt Busche</a>
+      <a href="https://twitter.com/mrbusche" target="_blank">
+        <img
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAMAAAC6V+0/AAAAS1BMVEUdofL///8aoPEKmfEVnvERnPEDlvDx+f6n2vpcvPWAyvdEsfTj8/3d8P3a7/zD5vu74/ut3fqg1/mS0fiGzPh8yPdRt/QyqfMAlPCGNm7pAAAAcklEQVQY063Oyw7DMAhEUWDAsZO+3///pW2RmHTf3IUXR9YI2S4z+ckt3+YtgjZgn3dRnca1FLsD4NBvp9pAV72JJ3I3hrJXbeJM24On4Fg4h1TohbD1aPQpbQmayHNOe0CIfs9/Fw9Zs0AzNO7RjfJ/b/csAlhCi+ExAAAAAElFTkSuQmCC"
+      /></a>
+    </footer>
     <script>
       (() => {
         'use strict';
@@ -252,6 +333,17 @@
           });
         }
       })();
+    </script>
+    <script src="https://browser.sentry-cdn.com/4.4.1/bundle.min.js" crossorigin="anonymous"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-130673714-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+
+      gtag('config', 'UA-130673714-1');
     </script>
   </body>
 </html>
