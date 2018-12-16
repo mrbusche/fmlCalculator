@@ -1,6 +1,9 @@
 # FML Calculator
+
 Fantasy Movie League Calculator
 
-You can pass in data through the URL by making a comma separated list of movies, costs and revenue, in that order.
+You are not required to pass any data through the URL, but you can by making a comma separated list of movies, costs and revenues. You can also pass in just the revenues
 
-Example https://www.fmlcalculator.com/?data=ralph%20breaks,grinch,creed%202,beasts,bohemian,instant%20family,green%20book,possession,robin%20hood,widows,favourite,schindlers%20list,a%20start%20is%20born,nutcracker,vox%20lux,326,265,212,126,119,103,64,63,62,57,47,36,30,17,8,16700000,12800000,10100000,6200000,5800000,5100000,3200000,2900000,2600000,2500000,2300000,1500000,1400000,759000,353000
+Revenues only https://www.fmlcalculator.com/?revenues=40814285,16822222,11271428,11438533,9958633,5896750,3725000,4119740,3466666,3608280,3616240,3107650,1694475,1637500,1324850
+
+All data https://www.fmlcalculator.com/?movies=spiderman,the%20mule,mortal%20engines,the%20grinch,ralph%20breaks,creed%202,once%20up%20a%20deadpool,bohemian%20rhapsody,the%20favourite,instant%20family,fantastic%20beasts,green%20book,robin%20hood,widows,a%20star%20is%20born&costs=571,235,171,155,127,68,68,55,52,51,41,41,23,21,19&revenues=40814285,16822222,11271428,11438533,9958633,5896750,3725000,4119740,3466666,3608280,3616240,3107650,1694475,1637500,1324850

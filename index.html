@@ -144,8 +144,44 @@
         </thead>
         <tbody>
           <tr>
-            <td><textarea id="movies" name="movies" rows="15" cols="35"></textarea></td>
-            <td><textarea id="movieCost" name="movieCost" rows="15" cols="6"></textarea></td>
+            <td>
+              <textarea id="movies" name="movies" rows="15" cols="35">
+spiderman
+the mule
+mortal engines
+the grinch
+ralph breaks
+creed 2
+once up a deadpool
+bohemian rhapsody
+the favourite
+instant family
+fantastic beasts
+green book
+robin hood
+widows
+a star is born</textarea
+              >
+            </td>
+            <td>
+              <textarea id="movieCost" name="movieCost" rows="15" cols="6">
+571
+235
+171
+155
+127
+68
+68
+55
+52
+51
+41
+41
+23
+21
+19</textarea
+              >
+            </td>
             <td><textarea id="movieRevenue" name="movieRevenue" rows="15" cols="15"></textarea></td>
           </tr>
           <tr>
@@ -263,16 +299,10 @@
           newCell.appendChild(document.createTextNode(boxOffice));
         };
 
-        fml.getMovieListFromURL = function() {
-          const url = new URL(location.href);
-          const searchParams = new URLSearchParams(url.search);
-          return searchParams.get('data');
-        };
-
-        fml.addMoviesToForm = function(movieData) {
-          document.getElementById('movies').textContent = movieData.slice(0, 15).join('\n');
-          document.getElementById('movieCost').textContent = movieData.slice(15, 30).join('\n');
-          document.getElementById('movieRevenue').textContent = movieData.slice(30, 45).join('\n');
+        fml.addMoviesToForm = function(movieList, costList, revenueList) {
+          document.getElementById('movies').textContent = movieList.slice(0, 15).join('\n');
+          document.getElementById('movieCost').textContent = costList.slice(0, 15).join('\n');
+          document.getElementById('movieRevenue').textContent = revenueList.slice(0, 15).join('\n');
         };
 
         fml.generateMovies = function() {
@@ -287,33 +317,39 @@
           return movieObj;
         };
 
-        fml.updateUrl = function() {
-          let newUrl = 'index.html?data=';
-          newUrl +=
-            document
-              .getElementById('movies')
-              .value.split('\n')
-              .join() + ',';
-          newUrl +=
-            document
-              .getElementById('movieCost')
-              .value.split('\n')
-              .join() + ',';
-          newUrl += document
-            .getElementById('movieRevenue')
+        fml.createList = function(id) {
+          return document
+            .getElementById(id)
             .value.split('\n')
             .join();
+        };
+
+        fml.updateUrl = function() {
+          let newUrl = '?movies=' + fml.createList('movies');
+          newUrl += '&costs=' + fml.createList('movieCost');
+          newUrl += '&revenues=' + fml.createList('movieRevenue');
           window.location = encodeURI(newUrl);
         };
 
         var b = document.getElementById('sub');
         b.onclick = fml.updateUrl;
 
-        const dataInUrl = fml.getMovieListFromURL();
-        const movieData = dataInUrl !== null ? dataInUrl.split(',') : [];
-        if (movieData.length) {
-          fml.addMoviesToForm(movieData);
-          const theMovies = fml.generateMovies(movieData);
+        fml.getURLParam = function(param) {
+          const url = new URL(location.href);
+          const searchParams = new URLSearchParams(url.search);
+          return searchParams.get(param);
+        };
+
+        const moviesInUrl = fml.getURLParam('movies');
+        const movieList = moviesInUrl !== null ? moviesInUrl.split(',') : document.getElementById('movies').textContent.split('\n');
+        const costsInUrl = fml.getURLParam('costs');
+        const costList = costsInUrl !== null ? costsInUrl.split(',') : document.getElementById('movieCost').textContent.split('\n');
+        const revenuesInUrl = fml.getURLParam('revenues');
+        const revenueList = revenuesInUrl !== null ? revenuesInUrl.split(',') : [];
+
+        if (movieList.length && costList.length && revenueList.length) {
+          fml.addMoviesToForm(movieList, costList, revenueList);
+          const theMovies = fml.generateMovies();
           const sortMovies = theMovies.slice(0, 15);
           sortMovies.sort((a, b) => a.cost / a.estimate - b.cost / b.estimate);
           sortMovies.forEach(a => {
