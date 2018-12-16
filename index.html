@@ -101,6 +101,11 @@
   <body>
     <div class="content">
       <h1>FML Calculator</h1>
+      <h3 id="error" style="display: none;">
+        <ul style="color: red;">
+          <li>Parameter lengths are not equal.</li>
+        </ul>
+      </h3>
       <h2 id="perfHeader" style="display: none;">Performance</h2>
       <table id="tableHeader" style="display:none" border="1">
         <thead>
@@ -347,6 +352,9 @@ a star is born</textarea
         const revenuesInUrl = fml.getURLParam('revenues');
         const revenueList = revenuesInUrl !== null ? revenuesInUrl.split(',') : [];
 
+        if (revenueList.length && (movieList.length !== costList.length || costList.length !== revenueList.length)) {
+          document.getElementById('error').removeAttribute('style');
+        }
         if (movieList.length && costList.length && revenueList.length) {
           fml.addMoviesToForm(movieList, costList, revenueList);
           const theMovies = fml.generateMovies();
