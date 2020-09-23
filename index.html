@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="description" content="Fantasy Movie League Calculator" />
-    <meta name="author" content="Matt Busche" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="description" content="Fantasy Movie League Calculator"/>
+    <meta name="author" content="Matt Busche"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
     <title>FML Calculator</title>
-    <link href="css/styles.css" rel="stylesheet" type="text/css" />
+    <link href="css/styles.css" rel="stylesheet" type="text/css"/>
   </head>
   <body>
     <div class="content">
@@ -18,44 +18,50 @@
         </ul>
       </h3>
       <h2 id="perfHeader" style="display: none;">Performance</h2>
-      <table id="tableHeader" style="display:none" border="1">
+      <table id="tableHeader" style="display:none" border="1" aria-describedby="Performance results">
         <thead>
           <tr>
-            <th>Movie</th>
-            <th>Cost</th>
-            <th>Estimate</th>
-            <th>Ratio</th>
+            <th id="Movie">Movie</th>
+            <th id="Cost">Cost</th>
+            <th id="Estimate">Estimate</th>
+            <th id="Ratio">Ratio</th>
           </tr>
         </thead>
         <tbody id="performance"></tbody>
       </table>
       <h2 id="results1" style="display: none;">Top 20 results</h2>
       <div id="results2" style="display: none;">
-        <table id="resultsTable" border="1">
+        <table id="resultsTable" border="1" aria-describedby="Movie Details">
           <thead>
             <tr>
-              <th>#</th>
-              <th>Screen 1</th>
-              <th>Screen 2</th>
-              <th>Screen 3</th>
-              <th>Screen 4</th>
-              <th>Screen 5</th>
-              <th>Screen 6</th>
-              <th>Screen 7</th>
-              <th>Screen 8</th>
-              <th>Cost</th>
-              <th>Box Office</th>
+              <th id="order">#</th>
+              <th id="screen1">Screen 1</th>
+              <th id="screen2">Screen 2</th>
+              <th id="screen3">Screen 3</th>
+              <th id="screen4">Screen 4</th>
+              <th id="screen5">Screen 5</th>
+              <th id="screen6">Screen 6</th>
+              <th id="screen7">Screen 7</th>
+              <th id="screen8">Screen 8</th>
+              <th id="cost">Cost</th>
+              <th id="boxOffice">Box Office</th>
             </tr>
           </thead>
           <tbody id="addMovies"></tbody>
         </table>
       </div>
-      <table>
+      <table description="movieInputs">
         <thead>
           <tr>
-            <th><label for="movies">Movies</label></th>
-            <th><label for="movieCost">Cost</label></th>
-            <th><label for="movieRevenue">Estimate</label></th>
+            <th id="movieInput">
+              <label for="movies">Movies</label>
+            </th>
+            <th id="costInput">
+              <label for="movieCost">Cost</label>
+            </th>
+            <th id="estimateInput">
+              <label for="movieRevenue">Estimate</label>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -116,25 +122,27 @@ fantasty island</textarea>
             </td>
           </tr>
           <tr>
-            <td><button id="sub">get results</button></td>
+            <td>
+              <button id="sub">get results</button>
+            </td>
           </tr>
         </tbody>
       </table>
     </div>
 
     <footer class="footer">
-      Created by <a href="https://matthewbusche.com" target="_blank" rel="noopener">Matt Busche</a>
-      <a href="https://twitter.com/mrbusche" target="_blank" rel="noopener">
+      Created by <a href="https://matthewbusche.com" target="_blank" rel="noopener noreferrer">Matt Busche</a>
+      <a href="https://twitter.com/mrbusche" target="_blank" rel="noopener noreferrer">
         <img
           src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAMAAAC6V+0/AAAAS1BMVEUdofL///8aoPEKmfEVnvERnPEDlvDx+f6n2vpcvPWAyvdEsfTj8/3d8P3a7/zD5vu74/ut3fqg1/mS0fiGzPh8yPdRt/QyqfMAlPCGNm7pAAAAcklEQVQY063Oyw7DMAhEUWDAsZO+3///pW2RmHTf3IUXR9YI2S4z+ckt3+YtgjZgn3dRnca1FLsD4NBvp9pAV72JJ3I3hrJXbeJM24On4Fg4h1TohbD1aPQpbQmayHNOe0CIfs9/Fw9Zs0AzNO7RjfJ/b/csAlhCi+ExAAAAAElFTkSuQmCC"
           alt="twitter profile"
-      /></a>
-      <a href="https://github.com/mrbusche/fmlCalculator" target="_blank" rel="noopener">
+/></a>
+      <a href="https://github.com/mrbusche/fmlCalculator" target="_blank" rel="noopener noreferrer">
         <img
           src="
       data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAMAAAC6V+0/AAAAe1BMVEX///8WFBUUEhMLCQoHBAYAAAAQDQ8iICG0srOFg4RoZ2dxcHAvLS75+fn29vaCgIFfXV5GREUtKywpJyj8/PzPzs6TkpJjY2NYV1dMS0sZFxjn5+fd3d3Z2NjV1NXGxsbGxca6ubqwsLA0MzQdGx2cnJx7enp3dnZvbm+Alsl1AAAA0ElEQVQY013O13KDMBBA0a2SAAE2mOpeUv7/C7NDNFYm5/GupBVsmjBFxDiFBt6CZyZEYvYBklIdJk7L1ISIkQwykWw1KM/nSsV70eo8swbb4Z2M8DaK8w08GKXKsRLkB+yY1iHHYSXeQUduD3/sHXWAaJPMbiJa/H/SYiTq6tzqjihCySRFjgUjl3AX/9TieABzOBZCyHeA/jVMSovVelmtud7GV33B3I/p50h6BdPqN/yuahlJ2vS49svHFsXlpZeoX2A+9XmB7HYCc7rB5geYUQlDWYO9BgAAAABJRU5ErkJggg=="
           alt="github project"
-      /></a>
+/></a>
     </footer>
     <script src="js/fml.js"></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-130673714-1"></script>

@@ -29,19 +29,19 @@
     }
 
     totalRevenue() {
-      return this.sumBy(this.theater, x => x.estimate);
+      return this.sumBy(this.theater, (x) => x.estimate);
     }
     totalCost() {
-      return this.sumBy(this.theater, x => x.cost);
+      return this.sumBy(this.theater, (x) => x.cost);
     }
 
     movieList() {
-      return this.theater.map(x => x.movie).join(', ');
+      return this.theater.map((x) => x.movie).join(', ');
     }
   }
 
   var fml = {};
-  fml.combosWithRep = function(l, arr) {
+  fml.combosWithRep = function (l, arr) {
     if (l === void 0) {
       l = arr.length;
     }
@@ -60,11 +60,11 @@
     return results;
   };
 
-  fml.financial = function(x) {
+  fml.financial = function (x) {
     return '$' + x.toLocaleString('en-US');
   };
 
-  fml.addPerformance = function(movieData) {
+  fml.addPerformance = function (movieData) {
     const tableBodyRef = document.getElementById('performance');
     const newRow = tableBodyRef.insertRow(tableBodyRef.rows.length);
     let newCell = newRow.insertCell(0);
@@ -77,7 +77,7 @@
     newCell.appendChild(document.createTextNode(fml.financial(movieData.estimate / movieData.cost)));
   };
 
-  fml.addTableData = function(order, movies, cost, boxOffice) {
+  fml.addTableData = function (order, movies, cost, boxOffice) {
     const tableBodyRef = document.getElementById('addMovies');
     const newRow = tableBodyRef.insertRow(tableBodyRef.rows.length);
     let newCell = newRow.insertCell(0);
@@ -93,13 +93,13 @@
     newCell.appendChild(document.createTextNode(boxOffice));
   };
 
-  fml.addMoviesToForm = function(movieList, costList, revenueList) {
-    document.getElementById('movies').textContent = movieList.slice(0, 15).join('\n');
-    document.getElementById('movieCost').textContent = costList.slice(0, 15).join('\n');
-    document.getElementById('movieRevenue').textContent = revenueList.slice(0, 15).join('\n');
+  fml.addMoviesToForm = function (listOfMovies, listOfCosts, listOfRevenues) {
+    document.getElementById('movies').textContent = listOfMovies.slice(0, 15).join('\n');
+    document.getElementById('movieCost').textContent = listOfCosts.slice(0, 15).join('\n');
+    document.getElementById('movieRevenue').textContent = listOfRevenues.slice(0, 15).join('\n');
   };
 
-  fml.generateMovies = function() {
+  fml.generateMovies = function () {
     const movies = document.getElementById('movies').textContent.split('\n');
     const movieCost = document.getElementById('movieCost').textContent.split('\n');
     const movieRevenue = document.getElementById('movieRevenue').textContent.split('\n');
@@ -111,14 +111,11 @@
     return movieObj;
   };
 
-  fml.createList = function(id) {
-    return document
-      .getElementById(id)
-      .value.split('\n')
-      .join();
+  fml.createList = function (id) {
+    return document.getElementById(id).value.split('\n').join();
   };
 
-  fml.updateUrl = function() {
+  fml.updateUrl = function () {
     let newUrl = '?movies=' + fml.createList('movies');
     newUrl += '&costs=' + fml.createList('movieCost');
     newUrl += '&revenues=' + fml.createList('movieRevenue');
@@ -128,7 +125,7 @@
   var b = document.getElementById('sub');
   b.onclick = fml.updateUrl;
 
-  fml.getURLParam = function(param) {
+  fml.getURLParam = function (param) {
     const url = new URL(location.href);
     const searchParams = new URLSearchParams(url.search);
     return searchParams.get(param);
@@ -148,8 +145,8 @@
     fml.addMoviesToForm(movieList, costList, revenueList);
     const theMovies = fml.generateMovies();
     const sortMovies = theMovies.slice(0, 15);
-    sortMovies.sort((a, b) => a.cost / a.estimate - b.cost / b.estimate);
-    sortMovies.forEach(a => {
+    sortMovies.sort((c, d) => c.cost / c.estimate - d.cost / d.estimate);
+    sortMovies.forEach((a) => {
       fml.addPerformance(a);
     });
 
@@ -158,10 +155,10 @@
     document.getElementById('results1').removeAttribute('style');
     document.getElementById('results2').removeAttribute('style');
     const all = fml.combosWithRep(8, theMovies);
-    const movieTheaters = all.map(it => new MovieTheater(it)).filter(it2 => it2.totalCost() < 1001);
-    movieTheaters.sort((a, b) => b.totalRevenue() - a.totalRevenue());
+    const movieTheaters = all.map((it) => new MovieTheater(it)).filter((it2) => it2.totalCost() < 1001);
+    movieTheaters.sort((e, f) => f.totalRevenue() - e.totalRevenue());
     let count = 0;
-    movieTheaters.forEach(a => {
+    movieTheaters.forEach((a) => {
       if (count < 20) {
         fml.addTableData(count + 1, a.movieList(), a.totalCost(), fml.financial(a.totalRevenue()));
       } else {
