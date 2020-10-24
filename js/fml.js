@@ -40,7 +40,7 @@
     }
   }
 
-  var fml = {};
+  const fml = {};
   fml.combosWithRep = function (l, arr) {
     if (l === void 0) {
       l = arr.length;
@@ -64,8 +64,7 @@
     return '$' + x.toLocaleString('en-US');
   };
 
-  fml.addPerformance = function (movieData) {
-    const tableBodyRef = document.getElementById('performance');
+  fml.addPerformance = function (movieData, tableBodyRef) {
     const newRow = tableBodyRef.insertRow(tableBodyRef.rows.length);
     let newCell = newRow.insertCell(0);
     newCell.appendChild(document.createTextNode(movieData.movie));
@@ -77,8 +76,13 @@
     newCell.appendChild(document.createTextNode(fml.financial(movieData.estimate / movieData.cost)));
   };
 
-  fml.addTableData = function (order, movies, cost, boxOffice) {
-    const tableBodyRef = document.getElementById('addMovies');
+  fml.clearChildren = function (containerNode) {
+    while (containerNode.firstChild) {
+      containerNode.removeChild(containerNode.lastChild);
+    }
+  }
+
+  fml.addTableData = function (tableBodyRef, order, movies, cost, boxOffice) {
     const newRow = tableBodyRef.insertRow(tableBodyRef.rows.length);
     let newCell = newRow.insertCell(0);
     newCell.appendChild(document.createTextNode(order));
@@ -116,14 +120,24 @@
   };
 
   fml.updateUrl = function () {
-    let newUrl = '?movies=' + fml.createList('movies');
-    newUrl += '&costs=' + fml.createList('movieCost');
-    newUrl += '&revenues=' + fml.createList('movieRevenue');
-    window.location = encodeURI(newUrl);
-  };
+    const movies = fml.createList('movies');
+    const costs = fml.createList('movieCost');
+    const revenues = fml.createList('movieRevenue');
+    const params = new URLSearchParams(location.search);
+    params.set('movies', movies);
+    params.set('costs', costs);
+    params.set('revenues', revenues);
 
-  var b = document.getElementById('sub');
-  b.onclick = fml.updateUrl;
+    const queryParams = {
+      movies,
+      costs,
+      revenues
+    };
+
+    window.history.replaceState(queryParams, 'FML Calculator', `${location.pathname}?${params.toString()}`);
+    window.history.pushState(queryParams, 'FML Calculator')
+    fml.renderMovies();
+  };
 
   fml.getURLParam = function (param) {
     const url = new URL(location.href);
@@ -131,40 +145,52 @@
     return searchParams.get(param);
   };
 
-  const moviesInUrl = fml.getURLParam('movies');
-  const movieList = moviesInUrl !== null ? moviesInUrl.split(',') : document.getElementById('movies').textContent.split('\n');
-  const costsInUrl = fml.getURLParam('costs');
-  const costList = costsInUrl !== null ? costsInUrl.split(',') : document.getElementById('movieCost').textContent.split('\n');
-  const revenuesInUrl = fml.getURLParam('revenues');
-  const revenueList = revenuesInUrl !== null ? revenuesInUrl.split(',') : [];
+  fml.renderMovies = function () {
+    window.scrollTo(0, 0);
+    const moviesInUrl = fml.getURLParam('movies');
+    const movieList = moviesInUrl !== null ? moviesInUrl.split(',') : document.getElementById('movies').textContent.split('\n');
+    const costsInUrl = fml.getURLParam('costs');
+    const costList = costsInUrl !== null ? costsInUrl.split(',') : document.getElementById('movieCost').textContent.split('\n');
+    const revenuesInUrl = fml.getURLParam('revenues');
+    const revenueList = revenuesInUrl !== null ? revenuesInUrl.split(',') : [];
 
-  if (revenueList.length && (movieList.length !== costList.length || costList.length !== revenueList.length)) {
-    document.getElementById('error').removeAttribute('style');
-  }
-  if (movieList.length && costList.length && revenueList.length) {
-    fml.addMoviesToForm(movieList, costList, revenueList);
-    const theMovies = fml.generateMovies();
-    const sortMovies = theMovies.slice(0, 15);
-    sortMovies.sort((c, d) => c.cost / c.estimate - d.cost / d.estimate);
-    sortMovies.forEach((a) => {
-      fml.addPerformance(a);
-    });
+    if (revenueList.length && (movieList.length !== costList.length || costList.length !== revenueList.length)) {
+      document.getElementById('error').removeAttribute('style');
+    }
+    if (movieList.length && costList.length && revenueList.length) {
+      fml.addMoviesToForm(movieList, costList, revenueList);
+      const theMovies = fml.generateMovies();
+      const sortMovies = theMovies.slice(0, 15);
+      sortMovies.sort((c, d) => c.cost / c.estimate - d.cost / d.estimate);
+      const performanceTable = document.getElementById('performance');
+      fml.clearChildren(performanceTable);
+      sortMovies.forEach((movieData) => {
+        fml.addPerformance(movieData, performanceTable);
+      });
 
-    document.getElementById('perfHeader').removeAttribute('style');
-    document.getElementById('tableHeader').removeAttribute('style');
-    document.getElementById('results1').removeAttribute('style');
-    document.getElementById('results2').removeAttribute('style');
-    const all = fml.combosWithRep(8, theMovies);
-    const movieTheaters = all.map((it) => new MovieTheater(it)).filter((it2) => it2.totalCost() < 1001);
-    movieTheaters.sort((e, f) => f.totalRevenue() - e.totalRevenue());
-    let count = 0;
-    movieTheaters.forEach((a) => {
-      if (count < 20) {
-        fml.addTableData(count + 1, a.movieList(), a.totalCost(), fml.financial(a.totalRevenue()));
-      } else {
-        return false;
-      }
-      count++;
-    });
+      document.getElementById('perfHeader').removeAttribute('style');
+      document.getElementById('tableHeader').removeAttribute('style');
+      document.getElementById('results1').removeAttribute('style');
+      document.getElementById('results2').removeAttribute('style');
+      const all = fml.combosWithRep(8, theMovies);
+      const movieTheaters = all.map((it) => new MovieTheater(it)).filter((it2) => it2.totalCost() < 1001);
+      movieTheaters.sort((e, f) => f.totalRevenue() - e.totalRevenue());
+      let count = 0;
+      const movieTable = document.getElementById('addMovies');
+      fml.clearChildren(movieTable);
+      movieTheaters.forEach((a) => {
+        if (count < 20) {
+          fml.addTableData(movieTable, count + 1, a.movieList(), a.totalCost(), fml.financial(a.totalRevenue()));
+        } else {
+          return false;
+        }
+        count++;
+      });
+    }
   }
+
+  fml.renderMovies();
+
+  const b = document.getElementById('sub');
+  b.onclick = fml.updateUrl;
 })();
